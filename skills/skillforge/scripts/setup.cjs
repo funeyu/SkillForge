@@ -7,7 +7,7 @@ const { spawn } = require('node:child_process');
 const { Readable, Transform } = require('node:stream');
 const { pipeline } = require('node:stream/promises');
 
-const version = '0.0.1';
+const version = '0.0.2';
 const asset = `SkillForge-${version}-macos-arm64.zip`;
 const release = `https://github.com/funeyu/SkillForge/releases/download/${version}`;
 const report = message => process.stderr.write(`[SkillForge] ${message}\n`);

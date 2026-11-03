@@ -33,7 +33,7 @@ node "<skills CLI 输出的 Skill 安装目录>/scripts/skillforge.cjs" setup
 
 默认安装到 `~/Applications/SkillForge.app`，优先复用已有应用；只有语音自检通过才报告就绪。详细说明见[安装配置](docs/guide.zh-CN.md#安装到-agent)。
 
-也可以从 [Releases](https://github.com/funeyu/SkillForge/releases/tag/0.0.1) 下载 0.0.1 桌面版，提供 macOS Apple Silicon 的 DMG 和 ZIP。它自带语音模型和独立语音运行时，不用另外安装 Python；暂未提供 Intel Mac、Windows 和 Linux 安装包。
+也可以从 [Releases](https://github.com/funeyu/SkillForge/releases/tag/0.0.2) 下载 0.0.2 桌面版，提供 macOS Apple Silicon 的 DMG 和 ZIP。它自带语音模型和独立语音运行时，不用另外安装 Python；暂未提供 Intel Mac、Windows 和 Linux 安装包。
 
 将应用放入「应用程序」后，可以直接用它自带的安装器安装技能入口，并自动绑定路径（与上面的方式任选其一，不要重复安装）：
 

@@ -39,7 +39,7 @@ node "<Skill 安装目录>/scripts/skillforge.cjs" setup
 自动安装目前支持 macOS Apple Silicon（arm64）：
 
 1. 检查已绑定的源码或应用，优先复用 `~/Applications/SkillForge.app`、`/Applications/SkillForge.app`。
-2. 没有应用时下载固定 `0.0.1` Release 的 ZIP 和 `SHA256SUMS.txt`，显示下载百分比和已下载字节数（服务器未给出长度时显示字节数）。安装包包含 Electron、网页依赖、Base 语音模型及独立语音运行时，无需 Python。
+2. 没有应用时下载固定 `0.0.2` Release 的 ZIP 和 `SHA256SUMS.txt`，显示下载百分比和已下载字节数（服务器未给出长度时显示字节数）。安装包包含 Electron、网页依赖、Base 语音模型及独立语音运行时，无需 Python。
 3. 验证 ZIP 的 SHA-256 后解压到临时目录，再检查依赖、模型大小和哈希，实际启动语音进程完成 `ready` / `done` 自检。耗时步骤持续显示等待时间，不伪造整体百分比。
 4. 校验通过才将应用移入 `~/Applications/SkillForge.app` 并生成 `runtime.json`，默认将新技能发布到当前技能入口所在的技能目录。不覆盖已有应用或配置。
 
@@ -218,9 +218,9 @@ npm run prepare:speech
 
 ## 发布与打包
 
-### 0.0.1 安装包
+### 0.0.2 安装包
 
-GitHub Releases 的 `0.0.1` 标签提供 macOS Apple Silicon（arm64）的 DMG 安装包和 ZIP。打开 DMG 后将 SkillForge 拖入「应用程序」，或解压 ZIP 后移动应用。当前版本未进行 Apple Developer ID 签名和公证，macOS 可能拦截首次启动；请确认下载来源后，在「系统设置 → 隐私与安全性」中按系统提示允许打开。暂未提供 Intel Mac、Windows 和 Linux 安装包。
+GitHub Releases 的 `0.0.2` 标签提供 macOS Apple Silicon（arm64）的 DMG 安装包和 ZIP。打开 DMG 后将 SkillForge 拖入「应用程序」，或解压 ZIP 后移动应用。当前版本未进行 Apple Developer ID 签名和公证，macOS 可能拦截首次启动；请确认下载来源后，在「系统设置 → 隐私与安全性」中按系统提示允许打开。暂未提供 Intel Mac、Windows 和 Linux 安装包。
 
 安装包包含 Electron、网页读取依赖、完整 Base 模型，以及 PyInstaller 打包的独立语音处理器和推理运行时；无需安装 Python，也不依赖开发机的 `.venv-speech` 或同级项目。桌面应用仍需当前 Agent 完成 Skill 提炼，不会独立调用模型。
 
@@ -241,8 +241,8 @@ npm run prepare:speech
 npm run dist:mac
 ```
 
-构建会校验模型、安装固定版本的 PyInstaller 并打包独立语音运行时，再使用 electron-builder 生成 `dist/release/SkillForge-0.0.1-macos-arm64.dmg` 和同名 ZIP。首次构建需要网络下载工具；构建产物不提交到 Git，而是上传到对应标签的 GitHub Release。`.venv-speech` 仅用于本机构建，不会直接复制到安装包。
+构建会校验模型、安装固定版本的 PyInstaller 并打包独立语音运行时，再使用 electron-builder 生成 `dist/release/SkillForge-0.0.2-macos-arm64.dmg` 和同名 ZIP。首次构建需要网络下载工具；构建产物不提交到 Git，而是上传到对应标签的 GitHub Release。`.venv-speech` 仅用于本机构建，不会直接复制到安装包。
 
-推送与 `package.json` 版本一致的标签（例如 `0.0.1`）会触发 `.github/workflows/release.yml`，在 GitHub Actions 的 macOS arm64 环境中构建，校验独立语音运行时，并将 DMG、ZIP 和 SHA-256 校验文件发布到 Release。工作流使用仓库自动提供的 `GITHUB_TOKEN`，本机只需通过 SSH 推送代码和标签，不需要登录 GitHub CLI。
+推送与 `package.json` 版本一致的标签（例如 `0.0.2`）会触发 `.github/workflows/release.yml`，在 GitHub Actions 的 macOS arm64 环境中构建，校验独立语音运行时，并将 DMG、ZIP 和 SHA-256 校验文件发布到 Release。工作流使用仓库自动提供的 `GITHUB_TOKEN`，本机只需通过 SSH 推送代码和标签，不需要登录 GitHub CLI。
 
 推送 `main` 或手动运行工作流也会检查当前版本的标签：只有标签存在且 Release 尚未公开时才执行发布，始终检出标签指向的源码进行构建。已公开的 Release 会跳过，不覆盖已发布安装包，也不会移动标签。

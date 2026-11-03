@@ -33,7 +33,7 @@ node "<Skill directory reported by the skills CLI>/scripts/skillforge.cjs" setup
 
 The default destination is `~/Applications/SkillForge.app`; existing apps are reused. Setup reports readiness only after the speech self-check passes. See the [installation guide (Chinese)](docs/guide.zh-CN.md#安装到-agent).
 
-The [0.0.1 release](https://github.com/funeyu/SkillForge/releases/tag/0.0.1) provides a desktop app for macOS Apple Silicon as a DMG or ZIP. It bundles the speech model and a standalone speech runtime, so Python is not required. There are no packages for Intel Macs, Windows, or Linux yet.
+The [0.0.2 release](https://github.com/funeyu/SkillForge/releases/tag/0.0.2) provides a desktop app for macOS Apple Silicon as a DMG or ZIP. It bundles the speech model and a standalone speech runtime, so Python is not required. There are no packages for Intel Macs, Windows, or Linux yet.
 
 After moving the app to Applications, you can use its installer instead. It installs the entry point and binds the runtime path automatically. Choose one installation method; do not install twice into the same directory.
 
