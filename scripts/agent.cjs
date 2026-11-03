@@ -40,12 +40,12 @@ function launch(store, id) {
   });
 }
 
-async function waitForJob(store, id, seconds) {
+async function waitForJob(store, id, seconds, { stopOnLogin = true } = {}) {
   if (!Number.isFinite(seconds) || seconds < 0 || seconds > 600) throw new Error('--wait 应为 0–600 秒');
   const deadline = Date.now() + seconds * 1000;
   for (;;) {
     const job = store.read(id);
-    if (terminal.has(job.status) || ['login_required', 'awaiting_agent'].includes(job.status) || Date.now() >= deadline) return job;
+    if (terminal.has(job.status) || job.status === 'awaiting_agent' || (stopOnLogin && job.status === 'login_required') || Date.now() >= deadline) return job;
     await new Promise(resolve => setTimeout(resolve, 400));
   }
 }
@@ -72,6 +72,7 @@ async function main(args = process.argv.slice(2), defaults = {}) {
     };
     const destination = installDirectory('skillforge', {
       'scripts/skillforge.cjs': fs.readFileSync(path.join(root, 'scripts', 'skillforge.cjs'), 'utf8'),
+      'scripts/setup.cjs': fs.readFileSync(path.join(root, 'scripts', 'setup.cjs'), 'utf8'),
       'runtime.json': JSON.stringify(runtime, null, 2),
       'SKILL.md': fs.readFileSync(path.join(root, 'SKILL.md'), 'utf8')
     }, directory);
@@ -86,7 +87,7 @@ async function main(args = process.argv.slice(2), defaults = {}) {
     }
     return waitForJob(store, job.id, waitSeconds);
   }
-  if (command === 'status') return waitForJob(store, argument, waitSeconds);
+  if (command === 'status') return waitForJob(store, argument, waitSeconds, { stopOnLogin: false });
   if (command === 'pending') return store.jobs().filter(job => !terminal.has(job.status));
   if (command === 'cancel') {
     return store.cancel(argument);

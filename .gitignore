@@ -3,4 +3,5 @@ dist/
 .DS_Store
 *.log
 .venv-speech/
+skills/skillforge/runtime.json
 __pycache__/
