@@ -6,47 +6,6 @@ GitHub 仓库：[funeyu/SkillForge](https://github.com/funeyu/SkillForge)。技�
 
 ![SkillForge 首页：三维锻造台、网页输入框与技能工具箱入口](docs/images/skillforge-home.png)
 
-## 运行
-
-使用 Node.js 22.12 或更高版本，克隆仓库后安装依赖并启动：
-
-```sh
-git lfs install
-git clone https://github.com/funeyu/SkillForge.git
-cd SkillForge
-git lfs pull
-npm install
-npm start
-```
-
-源码中的语音模型使用 Git LFS 管理，克隆前请安装 Git LFS；下载源码 ZIP 不会包含实际模型。Release 安装包已经包含完整模型，无需 Git LFS。
-
-`npm run check` 检查 JavaScript 语法。首次安装需要网络；安装后锻造台页面与 Three.js 均从本地加载，无需网络。网页提取需要访问目标网站。3D 不可用时显示错误提示与重试按钮，不提供二维回退视图。
-
-## 开发热更新
-
-```sh
-npm run dev
-```
-
-- 保存 `styles.css`：即时更新样式，不刷新页面，保留当前视角和动画状态。
-- 保存 `index.html`、`forge-3d.js`、`toolbox.js` 或 `intake.js`：自动刷新页面。
-- 保存主进程、preload、锻造 IPC、网页读取窗口或共享模块：自动重启应用。界面刷新不丢失持久化任务；应用退出会取消正在进行的网页读取，已交接给 Agent 的任务仍保留。
-- `npm start` 与打包后的应用不启用文件监听。开发热更新不需要额外依赖或网络服务。
-
-## 功能
-
-- 锻造台使用单栏布局，占满工作区，桌面窗口内无需滚动。
-- 仅保留三维锻造台，移除二维模式及画风切换入口；旧的本机画风偏好不再影响启动。
-- 3D 锻造台支持拖动、方向键旋转，Home 键或双击场景恢复视角；尊重减少动态效果设置。
-- 界面以黑色为主色调，输入框、工具箱、Skill 卡片和播放识别窗口统一使用深灰层次。3D 场景采用黑灰机身、柔和轮廓光与少量暖橙炉火点缀，保留四阶卡通着色，无金属反射或木纹。待机时慢速演示落锤，生成中的锻造阶段加速；保留流动火焰和重力火星，暂停和减少动态效果设置会停止动作。材质无需下载外部贴图。
-- 点击右上角工具箱图标，查看已保存的 Skill 并展开正文；点击关闭按钮、遮罩或按 Esc 关闭。
-- Agent 传入 URL 自动打开 Electron；也可在应用内输入网址创建待处理任务。网页读取后等待当前 Agent 分析，不再要求填写模型地址或 API Key。单独运行 Electron 不会自行调用模型生成 Skill。
-- 输入资料时有暖橙纸片流入与场景扫描效果，AI 分析时锻锤加速，保存成功时亮起工具箱与成品特效。动效遵循系统减少动态效果设置。
-- 压力表显示网页快照的非空白 Unicode 字符数，不是 AI 生成进度或 token 数；新任务归零。低于 1,000 字为积累区，1,000–50,000 字为安全区，超过后显示压力提醒。浏览器快照上限为 1,000,000 字符，截断会明确记录。
-
-工具箱读取 `~/.skillforge/skills/<任务 ID>/skill.json`，同时保留展示当前页面原有的 `skillforge.skills.v1` 本地记录。每份新 Skill 同时保存 `SKILL.md` 和 `source.json`，记录原始 URL、最终 URL、标题、读取时间和正文 SHA-256。Agent 提交结果后，工具箱自动更新，并显示实际安装状态；安装失败不丢失已保存的 Skill。
-
 ## 安装到 Agent
 
 以下两种安装方式任选其一，不要向同一个技能目录重复安装。
@@ -96,7 +55,7 @@ node "<Skill 安装目录>/scripts/skillforge.cjs" help
 
 ### 方式二：使用项目安装器
 
-完成上述仓库克隆和依赖安装后，在项目目录运行：
+按照「运行」章节完成仓库克隆和依赖安装后，在项目目录运行：
 
 ```sh
 npm run install:skill
@@ -108,6 +67,47 @@ npm run install:skill -- --agent generic
 项目安装器会自动写入 `runtime.json`，无需手动绑定路径。默认安装到 `$CODEX_HOME/skills` 或 `~/.codex/skills`；Claude 使用 `~/.claude/skills`，generic 使用 `~/.agents/skills`，其他位置通过 `--skills-dir` 指定。安装器不覆盖同名目录。安装后的轻量入口通过 `runtime.json` 指向本项目，项目移动后需更新该路径。Agent 可能需要重新加载会话才会发现新技能。受宿主权限限制时必须取得合法写入权限，不尝试绕过沙箱。
 
 入口同时记住安装时的 Agent 和技能目录：从 Claude 入口发布的新 Skill 默认回到 Claude，从自定义目录安装的入口发布时也默认回到该目录，不会误装到 Codex。安装时显式传入的 `--data-dir` 也会保留。调用已安装的 `scripts/skillforge.cjs` 时仍可用参数覆盖；显式切换 `--agent` 会改用目标 Agent 的默认目录，除非同时指定 `--skills-dir`。直接调用仓库的 `scripts/agent.cjs` 不读取已安装入口的配置。
+
+## 运行
+
+使用 Node.js 22.12 或更高版本，克隆仓库后安装依赖并启动：
+
+```sh
+git lfs install
+git clone https://github.com/funeyu/SkillForge.git
+cd SkillForge
+git lfs pull
+npm install
+npm start
+```
+
+源码中的语音模型使用 Git LFS 管理，克隆前请安装 Git LFS；下载源码 ZIP 不会包含实际模型。Release 安装包已经包含完整模型，无需 Git LFS。
+
+`npm run check` 检查 JavaScript 语法。首次安装需要网络；安装后锻造台页面与 Three.js 均从本地加载，无需网络。网页提取需要访问目标网站。3D 不可用时显示错误提示与重试按钮，不提供二维回退视图。
+
+## 开发热更新
+
+```sh
+npm run dev
+```
+
+- 保存 `styles.css`：即时更新样式，不刷新页面，保留当前视角和动画状态。
+- 保存 `index.html`、`forge-3d.js`、`toolbox.js` 或 `intake.js`：自动刷新页面。
+- 保存主进程、preload、锻造 IPC、网页读取窗口或共享模块：自动重启应用。界面刷新不丢失持久化任务；应用退出会取消正在进行的网页读取，已交接给 Agent 的任务仍保留。
+- `npm start` 与打包后的应用不启用文件监听。开发热更新不需要额外依赖或网络服务。
+
+## 功能
+
+- 锻造台使用单栏布局，占满工作区，桌面窗口内无需滚动。
+- 仅保留三维锻造台，移除二维模式及画风切换入口；旧的本机画风偏好不再影响启动。
+- 3D 锻造台支持拖动、方向键旋转，Home 键或双击场景恢复视角；尊重减少动态效果设置。
+- 界面以黑色为主色调，输入框、工具箱、Skill 卡片和播放识别窗口统一使用深灰层次。3D 场景采用黑灰机身、柔和轮廓光与少量暖橙炉火点缀，保留四阶卡通着色，无金属反射或木纹。待机时慢速演示落锤，生成中的锻造阶段加速；保留流动火焰和重力火星，暂停和减少动态效果设置会停止动作。材质无需下载外部贴图。
+- 点击右上角工具箱图标，查看已保存的 Skill 并展开正文；点击关闭按钮、遮罩或按 Esc 关闭。
+- Agent 传入 URL 自动打开 Electron；也可在应用内输入网址创建待处理任务。网页读取后等待当前 Agent 分析，不再要求填写模型地址或 API Key。单独运行 Electron 不会自行调用模型生成 Skill。
+- 输入资料时有暖橙纸片流入与场景扫描效果，AI 分析时锻锤加速，保存成功时亮起工具箱与成品特效。动效遵循系统减少动态效果设置。
+- 压力表显示网页快照的非空白 Unicode 字符数，不是 AI 生成进度或 token 数；新任务归零。低于 1,000 字为积累区，1,000–50,000 字为安全区，超过后显示压力提醒。浏览器快照上限为 1,000,000 字符，截断会明确记录。
+
+工具箱读取 `~/.skillforge/skills/<任务 ID>/skill.json`，同时保留展示当前页面原有的 `skillforge.skills.v1` 本地记录。每份新 Skill 同时保存 `SKILL.md` 和 `source.json`，记录原始 URL、最终 URL、标题、读取时间和正文 SHA-256。Agent 提交结果后，工具箱自动更新，并显示实际安装状态；安装失败不丢失已保存的 Skill。
 
 ## Agent 工作流
 
