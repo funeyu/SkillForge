@@ -1,0 +1,15 @@
+:root { color-scheme: dark; font-family: system-ui, sans-serif; color: #ededf0; background: #0a0a0b; }
+body { margin: 24px; }
+h1 { margin: 0 0 8px; font-size: 23px; }
+header p { color: #a0a0aa; font-size: 13px; }
+video { display: block; width: 100%; height: 310px; background: #050506; border: 1px solid #2c2c32; border-radius: 12px; object-fit: contain; }
+.toolbar { display: flex; align-items: center; gap: 16px; margin: 16px 0; }
+button { padding: 8px 20px; border: 1px solid #2c2c32; border-radius: 8px; background: #1c1c20; color: #ededf0; cursor: pointer; }
+button:hover { background: #29292f; }
+button:focus-visible { outline: 2px solid #f2a66f; outline-offset: 3px; }
+button:disabled { opacity: .5; cursor: default; }
+#status { font-size: 13px; }
+section { max-height: 200px; overflow: auto; border-top: 1px solid #2c2c32; }
+ol { list-style: none; padding: 0; line-height: 1.65; }
+li { margin: 8px 0; white-space: pre-wrap; }
+time { color: #a0a0aa; margin-right: 12px; font-variant-numeric: tabular-nums; }

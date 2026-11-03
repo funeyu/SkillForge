@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta name="theme-color" content="#0a0a0b">
+    <title>skill 锻造台</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./pressure.js" defer></script>
+    <script src="./forge-3d.js" defer></script>
+    <script src="./toolbox.js" defer></script>
+    <script src="./intake.js" defer></script>
+  </head>
+  <body>
+    <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+      <symbol id="toolbox" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18M8 10v4m8-4v4"/></symbol>
+      <symbol id="close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    </defs></svg>
+    <header class="titlebar"><span>skill 锻造台</span></header>
+    <main class="workspace">
+      <section class="workbench" aria-label="锻造台">
+        <div class="panel-header">
+          <form id="source-form" class="source-entry" novalidate>
+            <div class="source-field">
+              <input id="source-url" class="url-input" type="url" name="source-url" placeholder="粘贴网址，回车开启锻造" aria-label="素材网址" inputmode="url" autocomplete="url" spellcheck="false" autocapitalize="none" required>
+              <div class="intake-stream" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+          </form>
+          <div class="panel-actions">
+            <button id="open-toolbox" class="icon-button toolbox-toggle" type="button" aria-label="工具箱：查看已打造的 Skill" title="工具箱" aria-haspopup="dialog" aria-controls="skill-toolbox"><svg class="icon" aria-hidden="true"><use href="#toolbox"/></svg></button>
+          </div>
+        </div>
+        <div class="scene" id="scene">
+          <div class="scene-grid" aria-hidden="true"></div>
+          <div id="three-viewport"></div>
+          <div id="scene-loading" class="scene-loading" role="status"><span id="scene-loading-text">正在准备锻造台…</span><button id="retry-3d" class="text-button" hidden>重试</button></div>
+          <section id="intake-status" class="intake-status" aria-label="资料处理进度" hidden>
+            <div class="intake-status-heading"><span id="intake-message" role="status" aria-live="polite"></span><button id="cancel-intake" class="text-button" type="button" hidden>取消</button></div>
+            <div class="pressure-summary"><span id="pressure-count">0 字</span><span id="pressure-label">等待资料</span><meter id="pressure-meter" min="0" max="1000000" low="1000" high="50000" optimum="10000" value="0" aria-label="已读取资料字数"></meter></div>
+            <span id="pressure-alert" class="sr-only" role="status" aria-live="polite"></span>
+            <details id="source-preview"><summary id="source-title">查看已读取的资料</summary><p id="source-excerpt"></p></details>
+            <p id="intake-warning" class="intake-warning" hidden></p>
+          </section>
+        </div>
+      </section>
+    </main>
+    <dialog id="skill-toolbox" class="toolbox" aria-labelledby="toolbox-title" aria-describedby="toolbox-caption">
+      <header class="toolbox-header">
+        <div><h2 id="toolbox-title">工具箱</h2><p id="toolbox-caption">已打造的 Skill</p></div>
+        <button id="close-toolbox" class="icon-button" type="button" aria-label="关闭工具箱" title="关闭" autofocus><svg class="icon" aria-hidden="true"><use href="#close"/></svg></button>
+      </header>
+      <div class="toolbox-body">
+        <p id="toolbox-summary" class="toolbox-summary" role="status"></p>
+        <div id="toolbox-empty" class="toolbox-empty"><svg class="icon" aria-hidden="true"><use href="#toolbox"/></svg><h3>还没有打造的 Skill</h3><p>保存后的 Skill 会收纳在这里。</p></div>
+        <ul id="skill-list" class="skill-list" aria-label="已打造的 Skill" hidden></ul>
+      </div>
+    </dialog>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "name": "skillforge",
+  "version": "0.0.1",
+  "private": true,
+  "description": "A quiet local skill-forging workspace",
+  "main": "electron/entry.cjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/funeyu/SkillForge.git"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "check": "node scripts/check.cjs",
+    "extract": "node services/cli.cjs",
+    "agent": "node scripts/agent.cjs",
+    "install:skill": "node scripts/agent.cjs install-skill",
+    "prepare:speech": "node scripts/prepare-speech.cjs",
+    "check:speech-model": "node scripts/check-speech-model.cjs",
+    "bundle:speech": "node scripts/bundle-speech.cjs",
+    "dist:mac": "npm run check && npm run check:speech-model && npm run bundle:speech && electron-builder --mac --arm64 --publish never"
+  },
+  "dependencies": {
+    "@mozilla/readability": "0.6.0",
+    "jsdom": "26.1.0",
+    "three": "0.183.2"
+  },
+  "devDependencies": {
+    "electron": "45.0.0",
+    "electron-builder": "26.18.0"
+  }
+}

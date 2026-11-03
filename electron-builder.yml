@@ -1,0 +1,30 @@
+appId: com.funeyu.skillforge
+productName: SkillForge
+asar: false
+directories:
+  output: dist/release
+files:
+  - electron/**/*
+  - services/**/*
+  - scripts/agent.cjs
+  - skills/skillforge/**/*
+  - '*.js'
+  - '*.html'
+  - '*.css'
+  - package.json
+  - README.md
+extraResources:
+  - from: models/speech
+    to: models/speech
+  - from: dist/speech/skillforge-speech
+    to: speech-runtime
+mac:
+  category: public.app-category.productivity
+  identity: '-'
+  hardenedRuntime: false
+  target:
+    - dmg
+    - zip
+  artifactName: '${productName}-${version}-macos-${arch}.${ext}'
+dmg:
+  title: 'SkillForge ${version}'

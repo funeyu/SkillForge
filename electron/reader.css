@@ -1,0 +1,9 @@
+* { box-sizing: border-box; }
+body { margin: 0; background: #f7f8fa; color: #36435a; font: 13px -apple-system, BlinkMacSystemFont, sans-serif; }
+header { height: 112px; display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid #dfe5ec; }
+header > div { flex: 1; min-width: 0; }
+strong { display: block; font-size: 13px; }
+p { margin: 6px 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #6d7f95; }
+small { font-size: 11px; color: #7d8da1; }
+button { flex-shrink: 0; padding: 9px 12px; border: 1px solid #d3deec; border-radius: 8px; background: white; color: #36435a; cursor: pointer; }
+button:focus-visible { outline: 2px solid #6584ae; outline-offset: 3px; }

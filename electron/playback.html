@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; media-src skillforge-media:; connect-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
+    <title>SkillForge · 边播放边识别</title>
+    <link rel="stylesheet" href="./playback.css">
+    <script src="./playback.js" defer></script>
+  </head>
+  <body>
+    <header><h1>边播放边识别</h1><p>SkillForge 内置 Base 模型 · 本地离线 · 不采集麦克风</p></header>
+    <video id="media" playsinline crossorigin="anonymous"></video>
+    <div class="toolbar"><button id="toggle" disabled>暂停</button><span id="status" role="status">正在加载内置语音模型…</span></div>
+    <section aria-label="实时识别文字"><ol id="transcript" aria-live="polite"></ol></section>
+  </body>
+</html>
