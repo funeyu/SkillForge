@@ -156,3 +156,5 @@ npm run dist:mac
 构建会校验模型、安装固定版本的 PyInstaller 并打包独立语音运行时，再使用 electron-builder 生成 `dist/release/SkillForge-0.0.1-macos-arm64.dmg` 和同名 ZIP。首次构建需要网络下载工具；构建产物不提交到 Git，而是上传到对应标签的 GitHub Release。`.venv-speech` 仅用于本机构建，不会直接复制到安装包。
 
 推送与 `package.json` 版本一致的标签（例如 `0.0.1`）会触发 `.github/workflows/release.yml`，在 GitHub Actions 的 macOS arm64 环境中构建，校验独立语音运行时，并将 DMG、ZIP 和 SHA-256 校验文件发布到 Release。工作流使用仓库自动提供的 `GITHUB_TOKEN`，本机只需通过 SSH 推送代码和标签，不需要登录 GitHub CLI。
+
+推送 `main` 或手动运行工作流也会检查当前版本的标签：只有标签存在且 Release 尚未公开时才执行发布，始终检出标签指向的源码进行构建。已公开的 Release 会跳过，不覆盖已发布安装包，也不会移动标签。
