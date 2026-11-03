@@ -4,6 +4,8 @@
 
 GitHub 仓库：[funeyu/SkillForge](https://github.com/funeyu/SkillForge)。技能入口位于 [`skills/skillforge/SKILL.md`](skills/skillforge/SKILL.md)。
 
+![SkillForge 首页：三维锻造台、网页输入框与技能工具箱入口](docs/images/skillforge-home.png)
+
 ## 运行
 
 使用 Node.js 22.12 或更高版本，克隆仓库后安装依赖并启动：
@@ -47,6 +49,53 @@ npm run dev
 
 ## 安装到 Agent
 
+以下两种安装方式任选其一，不要向同一个技能目录重复安装。
+
+### 方式一：使用 npx skills
+
+使用 Node.js 22.12 或更高版本，通过 [skills CLI](https://github.com/vercel-labs/skills) 安装本仓库中的技能入口：
+
+```sh
+npx skills add funeyu/SkillForge --skill skillforge
+
+# 或指定全局安装到 Codex
+npx skills add funeyu/SkillForge --skill skillforge --agent codex --global
+
+# Claude Code
+npx skills add funeyu/SkillForge --skill skillforge --agent claude-code --global
+```
+
+不加 `--global` 时安装到当前项目；未指定 `--agent` 时按 CLI 提示选择目标 Agent。首次执行需要联网获取 CLI 和技能文件。
+
+如果 HTTPS 克隆受限且已配置 GitHub SSH key，也可以使用 SSH 地址：
+
+```sh
+npx skills add git@github.com:funeyu/SkillForge.git --skill skillforge
+```
+
+**npx 只安装技能入口，不会安装 SkillForge 桌面应用、项目依赖或语音运行时。** 还需要下载 [0.0.1 安装包](https://github.com/funeyu/SkillForge/releases/tag/0.0.1)，或按照「运行」章节克隆源码并安装依赖。
+
+随后在 CLI 输出的 Skill 安装目录内创建 `runtime.json`，与 `SKILL.md` 同级，将入口绑定到实际运行目录。如果文件已经存在，请先核对并保留原有配置。以 macOS 应用安装到 `/Applications`、目标 Agent 为 Codex 为例：
+
+```json
+{
+  "root": "/Applications/SkillForge.app/Contents/Resources/app",
+  "defaults": {
+    "agent": "codex"
+  }
+}
+```
+
+使用源码时，将 `root` 改为本地 SkillForge 项目的绝对路径（包含 `package.json` 和 `scripts/agent.cjs` 的目录）。Claude Code 将 `defaults.agent` 改为 `claude`；需要自定义生成技能的安装目录时，在 `defaults` 中增加 `skillsDir` 绝对路径。
+
+配置后可验证入口能找到运行时，再重新加载 Agent 会话：
+
+```sh
+node "<Skill 安装目录>/scripts/skillforge.cjs" help
+```
+
+### 方式二：使用项目安装器
+
 完成上述仓库克隆和依赖安装后，在项目目录运行：
 
 ```sh
@@ -56,7 +105,7 @@ npm run install:skill -- --agent claude
 npm run install:skill -- --agent generic
 ```
 
-默认安装到 `$CODEX_HOME/skills` 或 `~/.codex/skills`；Claude 使用 `~/.claude/skills`，generic 使用 `~/.agents/skills`，其他位置通过 `--skills-dir` 指定。安装器不覆盖同名目录。安装后的轻量入口通过 `runtime.json` 指向本项目，项目移动后需更新该路径。Agent 可能需要重新加载会话才会发现新技能。受宿主权限限制时必须取得合法写入权限，不尝试绕过沙箱。
+项目安装器会自动写入 `runtime.json`，无需手动绑定路径。默认安装到 `$CODEX_HOME/skills` 或 `~/.codex/skills`；Claude 使用 `~/.claude/skills`，generic 使用 `~/.agents/skills`，其他位置通过 `--skills-dir` 指定。安装器不覆盖同名目录。安装后的轻量入口通过 `runtime.json` 指向本项目，项目移动后需更新该路径。Agent 可能需要重新加载会话才会发现新技能。受宿主权限限制时必须取得合法写入权限，不尝试绕过沙箱。
 
 入口同时记住安装时的 Agent 和技能目录：从 Claude 入口发布的新 Skill 默认回到 Claude，从自定义目录安装的入口发布时也默认回到该目录，不会误装到 Codex。安装时显式传入的 `--data-dir` 也会保留。调用已安装的 `scripts/skillforge.cjs` 时仍可用参数覆盖；显式切换 `--agent` 会改用目标 Agent 的默认目录，除非同时指定 `--skills-dir`。直接调用仓库的 `scripts/agent.cjs` 不读取已安装入口的配置。
 
